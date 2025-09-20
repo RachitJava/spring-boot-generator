@@ -6,6 +6,9 @@ const CodePreview = ({ projectConfig, apis, generatedCode, onDownload, onBack })
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [copiedFile, setCopiedFile] = useState(null);
 
+
+
+
   const handleDownload = () => {
     onDownload();
     setShowSuccessMessage(true);
@@ -143,7 +146,7 @@ const CodePreview = ({ projectConfig, apis, generatedCode, onDownload, onBack })
                 </button>
               </div>
               
-              <div className="border rounded-lg bg-white shadow-sm overflow-hidden">
+              <div className="border rounded-lg bg-white shadow-sm overflow-hidden code-editor-container w-full max-w-full">
                 {/* Code Editor Header */}
                 <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200">
                   <div className="flex items-center gap-2 min-w-0 flex-1">
@@ -163,27 +166,48 @@ const CodePreview = ({ projectConfig, apis, generatedCode, onDownload, onBack })
                   </div>
                 </div>
                 
-                {/* Code Content */}
-                <div className="relative bg-white">
-                  <div className="flex max-h-64 sm:max-h-80 lg:max-h-96">
+                {/* Code Content - Responsive Editor */}
+                <div className="relative bg-white border-t">
+                  
+                  
+                  {/* Responsive Editor Container */}
+                  <div className="flex w-full h-48 sm:h-64 md:h-80 lg:h-96 xl:h-[28rem] border-2 border-gray-300 rounded-b-lg overflow-hidden bg-white shadow-inner">
                     {/* Line Numbers */}
-                    <div className="bg-gray-50 text-gray-400 text-xs font-mono py-3 px-2 sm:px-3 select-none border-r border-gray-200 flex-shrink-0 overflow-y-auto">
-                      {(generatedCode.files[selectedFile] || '').split('\n').map((_, index) => (
-                        <div key={index} className="leading-5 sm:leading-6 text-right whitespace-nowrap">
-                          {index + 1}
-                        </div>
-                      ))}
+                    <div className="bg-gray-50 text-gray-400 text-xs font-mono py-2 px-2 sm:px-3 select-none border-r border-gray-200 flex-shrink-0 w-10 sm:w-12 overflow-hidden">
+                      <div className="overflow-y-auto h-full line-numbers-scrollbar">
+                        {(generatedCode.files[selectedFile] || '').split('\n').map((_, index) => (
+                          <div key={index} className="leading-4 sm:leading-5 text-right whitespace-nowrap text-xs">
+                            {index + 1}
+                          </div>
+                        ))}
+                      </div>
                     </div>
                     
-                    {/* Code */}
-                    <div className="flex-1 overflow-auto">
-                      <div className="p-3 sm:p-4">
+                    {/* Code Editor Area */}
+                    <div className="flex-1 bg-white relative overflow-hidden">
+                      <div 
+                        className="absolute inset-0 overflow-auto editor-scrollbars"
+                        style={{
+                          scrollbarWidth: 'auto',
+                          scrollbarColor: '#6B7280 #E5E7EB'
+                        }}
+                      >
                         <pre 
-                          className="text-xs sm:text-sm font-mono leading-5 sm:leading-6 whitespace-pre block"
+                          className="text-xs sm:text-sm font-mono leading-4 sm:leading-5 p-2 sm:p-3 md:p-4 m-0 whitespace-pre code-content"
+                          style={{
+                            minWidth: '100%',
+                            width: 'max-content',
+                            fontFamily: '"Fira Code", "JetBrains Mono", "Consolas", "Monaco", monospace',
+                            tabSize: 2,
+                            position: 'relative',
+                            zIndex: 1
+                          }}
                         >
                           {generatedCode.files[selectedFile] || 'Select a file to view its content'}
                         </pre>
                       </div>
+                      
+
                     </div>
                   </div>
                 </div>
